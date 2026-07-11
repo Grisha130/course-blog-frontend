@@ -1,122 +1,77 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
+import Register from './pages/Register';
+import Login from './pages/Login';
+import VerifyEmailNotice from './pages/VerifyEmailNotice';
+import ProtectedRoute from './components/ProtectedRoute';
+import AdminRoute from './components/AdminRoute';
+import Profile from './pages/Profile';
+import ProfileEdit from './pages/ProfileEdit';
+import ChangePassword from './pages/ChangePassword';
+import AllCourses from './pages/AllCourses';
+import AllBlogs from './pages/AllBlogs';
+import MyCourses from './pages/MyCourses';
+import MyBlogs from './pages/MyBlogs';
+import MyDeletedCourses from './pages/MyDeletedCourses';
+import MyDeletedBlogs from './pages/MyDeletedBlogs';
+import BlogDetail from './pages/BlogDetail';
+import CourseDetail from './pages/CourseDetail';
+import BlogForm from './pages/BlogForm';
+import CourseForm from './pages/CourseForm';
+import NotFound from './pages/NotFound';
+import Users from './pages/admin/Users';
+import DeletedUsers from './pages/admin/DeletedUsers';
+import Categories from './pages/admin/Categories';
+import Tags from './pages/admin/Tags';
+import AdminBlogs from './pages/admin/Blogs';
+import AdminDeletedBlogs from './pages/admin/DeletedBlogs';
+import AdminCourses from './pages/admin/Courses';
+import AdminDeletedCourses from './pages/admin/DeletedCourses';
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/verify-email-notice" element={<VerifyEmailNotice />} />
 
-      <div className="ticks"></div>
+          <Route path="/" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+          <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+          <Route path="/profile/edit" element={<ProtectedRoute><ProfileEdit /></ProtectedRoute>} />
+          <Route path="/change-password" element={<ProtectedRoute><ChangePassword /></ProtectedRoute>} />
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+          <Route path="/my-courses" element={<ProtectedRoute><MyCourses /></ProtectedRoute>} />
+          <Route path="/my-courses/deleted" element={<ProtectedRoute><MyDeletedCourses /></ProtectedRoute>} />
+          <Route path="/my-blogs" element={<ProtectedRoute><MyBlogs /></ProtectedRoute>} />
+          <Route path="/my-blogs/deleted" element={<ProtectedRoute><MyDeletedBlogs /></ProtectedRoute>} />
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+          <Route path="/courses" element={<ProtectedRoute><AllCourses /></ProtectedRoute>} />
+          <Route path="/courses/create" element={<ProtectedRoute><CourseForm /></ProtectedRoute>} />
+          <Route path="/courses/:slug/edit" element={<ProtectedRoute><CourseForm /></ProtectedRoute>} />
+          <Route path="/courses/:slug" element={<ProtectedRoute><CourseDetail /></ProtectedRoute>} />
+
+          <Route path="/blogs" element={<ProtectedRoute><AllBlogs /></ProtectedRoute>} />
+          <Route path="/blogs/create" element={<ProtectedRoute><BlogForm /></ProtectedRoute>} />
+          <Route path="/blogs/:slug/edit" element={<ProtectedRoute><BlogForm /></ProtectedRoute>} />
+          <Route path="/blogs/:slug" element={<ProtectedRoute><BlogDetail /></ProtectedRoute>} />
+
+          <Route path="/admin/categories" element={<AdminRoute roles={['Admin', 'Super Admin']}><Categories /></AdminRoute>} />
+          <Route path="/admin/tags" element={<AdminRoute roles={['Admin', 'Super Admin']}><Tags /></AdminRoute>} />
+
+          <Route path="/admin/blogs" element={<AdminRoute roles={['Editor', 'Super Admin']}><AdminBlogs /></AdminRoute>} />
+          <Route path="/admin/deleted-blogs" element={<AdminRoute roles={['Editor', 'Super Admin']}><AdminDeletedBlogs /></AdminRoute>} />
+          <Route path="/admin/courses" element={<AdminRoute roles={['Editor', 'Super Admin']}><AdminCourses /></AdminRoute>} />
+          <Route path="/admin/deleted-courses" element={<AdminRoute roles={['Editor', 'Super Admin']}><AdminDeletedCourses /></AdminRoute>} />
+          <Route path="/admin/users" element={<AdminRoute roles={['Super Admin']}><Users /></AdminRoute>} />
+          <Route path="/admin/deleted-users" element={<AdminRoute roles={['Super Admin']}><DeletedUsers /></AdminRoute>} />
+
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
+  );
 }
 
-export default App
+export default App;

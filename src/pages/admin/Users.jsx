@@ -70,6 +70,7 @@ export default function Users() {
   };
 
   const currentRole = (u) => {
+    if (u.role?.includes('Super Admin')) return 'Super Admin';
     if (u.role?.includes('Admin')) return 'Admin';
     if (u.role?.includes('Editor')) return 'Editor';
     return 'user';
@@ -142,16 +143,22 @@ export default function Users() {
                   <p className="text-xs text-gray-400 mt-0.5">{u.email}</p>
                 </div>
 
-                <select
-                  value={currentRole(u)}
-                  onChange={(e) => handleRoleChange(u, e.target.value)}
-                  disabled={isSelf || busyId === u.id}
-                  className="rounded-lg border border-gray-200 px-3 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-gold/40 disabled:opacity-50"
-                >
-                  <option value="user">User</option>
-                  <option value="Editor">Editor</option>
-                  <option value="Admin">Admin</option>
-                </select>
+                {currentRole(u) === 'Super Admin' ? (
+                  <span className="text-xs font-medium text-gold-dark px-3 py-1.5">
+                    Super Admin
+                  </span>
+                ) : (
+                  <select
+                    value={currentRole(u)}
+                    onChange={(e) => handleRoleChange(u, e.target.value)}
+                    disabled={isSelf || busyId === u.id}
+                    className="rounded-lg border border-gray-200 px-3 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-gold/40 disabled:opacity-50"
+                  >
+                    <option value="user">User</option>
+                    <option value="Editor">Editor</option>
+                    <option value="Admin">Admin</option>
+                  </select>
+                )}
 
                 <button
                   onClick={() => handleBlockToggle(u)}

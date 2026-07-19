@@ -124,6 +124,7 @@ export default function CourseDetail() {
           onAdd={handleAddComment}
           onUpdate={handleUpdateComment}
           onDelete={handleDeleteComment}
+          postAuthorId={course.author?.id}
         />
       </div>
     </div>

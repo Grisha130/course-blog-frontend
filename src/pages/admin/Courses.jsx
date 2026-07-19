@@ -125,7 +125,7 @@ export default function Courses() {
                   <Link to={`/courses/${course.slug}`} className="font-display text-sm text-ink hover:underline truncate">
                     {course.title}
                   </Link>
-                  <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium border capitalize ${STATUS_STYLES[course.status]}`}>
+                  <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium border capitalize ${STATUS_STYLES[course.status]|| STATUS_STYLES.draft}`}>
                     {course.status}
                   </span>
                   {!course.is_active && (

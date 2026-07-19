@@ -6,7 +6,7 @@ function formatDate(dateStr) {
   return new Date(dateStr).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
 }
 
-export default function CommentSection({ comments, onAdd, onUpdate, onDelete }) {
+export default function CommentSection({ comments, onAdd, onUpdate, onDelete, postAuthorId }) {
   const { user } = useAuth();
   const [newComment, setNewComment] = useState('');
   const [submitting, setSubmitting] = useState(false);
@@ -63,53 +63,63 @@ export default function CommentSection({ comments, onAdd, onUpdate, onDelete }) 
         <p className="text-sm text-gray-400">No comments yet — be the first to write one.</p>
       ) : (
         <div className="space-y-4">
-          {comments.map((c) => (
-            <div key={c.id} className="flex gap-3">
-              <img
-                src={c.author?.avatar}
-                alt={c.author?.name}
-                className="w-9 h-9 rounded-full object-cover flex-shrink-0"
-              />
-              <div className="flex-1 bg-white border border-gray-100 rounded-xl p-3.5">
-                <div className="flex items-center justify-between gap-2 mb-1">
-                  <p className="text-sm font-medium text-ink">
-                    {c.author?.name} {c.author?.lastname}
-                  </p>
-                  <span className="text-xs text-gray-400">{formatDate(c.created_at)}</span>
+          {comments.map((c) => {
+            const isOwnComment = user?.id === c.author?.id;
+            const isPostAuthor = user?.id === postAuthorId;
+            const canDelete = isOwnComment || isPostAuthor;
+
+            return (
+              <div key={c.id} className="flex gap-3">
+                <img
+                  src={c.author?.avatar}
+                  alt={c.author?.name}
+                  className="w-9 h-9 rounded-full object-cover flex-shrink-0"
+                />
+                <div className="flex-1 bg-white border border-gray-100 rounded-xl p-3.5">
+                  <div className="flex items-center justify-between gap-2 mb-1">
+                    <p className="text-sm font-medium text-ink">
+                      {c.author?.name} {c.author?.lastname}
+                    </p>
+                    <span className="text-xs text-gray-400">{formatDate(c.created_at)}</span>
+                  </div>
+
+                  {editingId === c.id ? (
+                    <div className="flex gap-2 mt-1">
+                      <input
+                        type="text"
+                        value={editText}
+                        onChange={(e) => setEditText(e.target.value)}
+                        className="flex-1 rounded-lg border border-gray-200 px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-gold/40"
+                      />
+                      <button onClick={() => saveEdit(c.id)} className="text-xs text-gold-dark font-medium">
+                        Save
+                      </button>
+                      <button onClick={() => setEditingId(null)} className="text-xs text-gray-400">
+                        Cancel
+                      </button>
+                    </div>
+                  ) : (
+                    <p className="text-sm text-gray-600">{c.comment}</p>
+                  )}
+
+                  {editingId !== c.id && (isOwnComment || canDelete) && (
+                    <div className="flex gap-3 mt-2">
+                      {isOwnComment && (
+                        <button onClick={() => startEdit(c)} className="text-xs text-gold-dark font-medium hover:underline">
+                          Edit
+                        </button>
+                      )}
+                      {canDelete && (
+                        <button onClick={() => onDelete(c.id)} className="text-xs text-red-500 font-medium hover:underline">
+                          Delete
+                        </button>
+                      )}
+                    </div>
+                  )}
                 </div>
-
-                {editingId === c.id ? (
-                  <div className="flex gap-2 mt-1">
-                    <input
-                      type="text"
-                      value={editText}
-                      onChange={(e) => setEditText(e.target.value)}
-                      className="flex-1 rounded-lg border border-gray-200 px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-gold/40"
-                    />
-                    <button onClick={() => saveEdit(c.id)} className="text-xs text-gold-dark font-medium">
-                      Save
-                    </button>
-                    <button onClick={() => setEditingId(null)} className="text-xs text-gray-400">
-                      Cancel
-                    </button>
-                  </div>
-                ) : (
-                  <p className="text-sm text-gray-600">{c.comment}</p>
-                )}
-
-                {user?.id === c.author?.id && editingId !== c.id && (
-                  <div className="flex gap-3 mt-2">
-                    <button onClick={() => startEdit(c)} className="text-xs text-gold-dark font-medium hover:underline">
-                      Edit
-                    </button>
-                    <button onClick={() => onDelete(c.id)} className="text-xs text-red-500 font-medium hover:underline">
-                      Delete
-                    </button>
-                  </div>
-                )}
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
     </div>

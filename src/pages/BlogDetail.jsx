@@ -127,6 +127,7 @@ export default function BlogDetail() {
           onAdd={handleAddComment}
           onUpdate={handleUpdateComment}
           onDelete={handleDeleteComment}
+          postAuthorId={blog.author?.id}
         />
       </div>
     </div>

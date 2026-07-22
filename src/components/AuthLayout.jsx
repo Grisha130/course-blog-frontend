@@ -1,7 +1,6 @@
 export default function AuthLayout({ eyebrow, title, subtitle, children }) {
   return (
     <div className="min-h-screen flex bg-paper">
-      {/* Left panel — signature element */}
       <div className="hidden lg:flex lg:w-[44%] bg-ink relative flex-col justify-between p-12 overflow-hidden">
         <div className="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-gold/10 blur-3xl" />
 
@@ -21,7 +20,6 @@ export default function AuthLayout({ eyebrow, title, subtitle, children }) {
           </p>
         </div>
 
-        {/* floating course card mock — the signature element */}
         <div className="relative z-10 bg-ink-light border border-white/10 rounded-2xl p-5 max-w-xs shadow-2xl">
           <div className="flex items-center gap-3 mb-3">
             <div className="w-9 h-9 rounded-full bg-gold/20 flex items-center justify-center text-gold font-display text-sm">
@@ -39,7 +37,6 @@ export default function AuthLayout({ eyebrow, title, subtitle, children }) {
         </div>
       </div>
 
-      {/* Right panel — form */}
       <div className="flex-1 flex items-center justify-center p-6 sm:p-12">
         <div className="w-full max-w-sm">{children}</div>
       </div>
